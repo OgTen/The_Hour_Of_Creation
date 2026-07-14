@@ -104,7 +104,7 @@ local function ScanFuses()
                 local square = Drawing.new("Square")
                 square.Size = Vector2.new(34, 34)
                 square.Color = FUSE_COLOR
-                square.Transparency = 0.15
+                square.Transparency = 1
                 square.Filled = false
                 square.Thickness = 2
                 square.ZIndex = 999
@@ -114,7 +114,7 @@ local function ScanFuses()
                 local text = Drawing.new("Text")
                 text.Font = Drawing.Fonts.UI
                 text.Size = 12
-                text.Color = Color3.fromRGB(255, 255, 255)
+                text.Color = FUSE_COLOR
                 text.Outline = false
                 text.Center = true
                 text.ZIndex = 999
@@ -138,7 +138,7 @@ local function ScanCoins()
                 local square = Drawing.new("Square")
                 square.Size = Vector2.new(30, 30)
                 square.Color = COIN_COLOR
-                square.Transparency = 0.2
+                square.Transparency = 1
                 square.Filled = false
                 square.Thickness = 2
                 square.ZIndex = 999
@@ -148,7 +148,7 @@ local function ScanCoins()
                 local text = Drawing.new("Text")
                 text.Font = Drawing.Fonts.UI
                 text.Size = 12
-                text.Color = Color3.fromRGB(255, 255, 255)
+                text.Color = COIN_COLOR
                 text.Outline = false
                 text.Center = true
                 text.ZIndex = 999
@@ -156,7 +156,7 @@ local function ScanCoins()
                 CoinTexts[i] = text
             end
         end
-        notify("SmallCoins found: " .. #CoinTargets, "The Hour Of Creation", 3)
+        notify("Coins found: " .. #CoinTargets, "The Hour Of Creation", 3)
     end)
 end
 
@@ -181,7 +181,7 @@ local function ScanFuseBox()
                 FuseBoxDrawings[1] = Drawing.new("Square")
                 FuseBoxDrawings[1].Size = Vector2.new(50, 50)
                 FuseBoxDrawings[1].Color = FUSEBOX_COLOR
-                FuseBoxDrawings[1].Transparency = 0.2
+                FuseBoxDrawings[1].Transparency = 1
                 FuseBoxDrawings[1].Filled = false
                 FuseBoxDrawings[1].Thickness = 3
                 FuseBoxDrawings[1].ZIndex = 999
@@ -190,7 +190,7 @@ local function ScanFuseBox()
                 FuseBoxTexts[1] = Drawing.new("Text")
                 FuseBoxTexts[1].Font = Drawing.Fonts.UI
                 FuseBoxTexts[1].Size = 12
-                FuseBoxTexts[1].Color = Color3.fromRGB(255, 255, 255)
+                FuseBoxTexts[1].Color = FUSEBOX_COLOR
                 FuseBoxTexts[1].Outline = false
                 FuseBoxTexts[1].Center = true
                 FuseBoxTexts[1].ZIndex = 999
@@ -228,7 +228,7 @@ local function ScanBreakers()
                 local box = Drawing.new("Square")
                 box.Size = Vector2.new(40, 40)
                 box.Color = BREAKER_COLOR
-                box.Transparency = 0.15
+                box.Transparency = 1
                 box.Filled = false
                 box.Thickness = 2
                 box.ZIndex = 999
@@ -238,7 +238,7 @@ local function ScanBreakers()
                 local text = Drawing.new("Text")
                 text.Font = Drawing.Fonts.UI
                 text.Size = 12
-                text.Color = Color3.fromRGB(255, 255, 255)
+                text.Color = BREAKER_COLOR
                 text.Outline = false
                 text.Center = true
                 text.ZIndex = 999
@@ -282,7 +282,7 @@ local function ScanFreddy()
                 FreddyDrawing = Drawing.new("Square")
                 FreddyDrawing.Size = Vector2.new(60, 90)
                 FreddyDrawing.Color = FREDDY_COLOR
-                FreddyDrawing.Transparency = 0.2
+                FreddyDrawing.Transparency = 1
                 FreddyDrawing.Filled = false
                 FreddyDrawing.Thickness = 3
                 FreddyDrawing.ZIndex = 999
@@ -291,7 +291,7 @@ local function ScanFreddy()
                 FreddyText = Drawing.new("Text")
                 FreddyText.Font = Drawing.Fonts.UI
                 FreddyText.Size = 12
-                FreddyText.Color = Color3.fromRGB(255, 255, 255)
+                FreddyText.Color = FREDDY_COLOR
                 FreddyText.Outline = false
                 FreddyText.Center = true
                 FreddyText.ZIndex = 999
@@ -313,6 +313,12 @@ UI.SetValue("breaker_enabled", false)
 UI.SetValue("show_labels", true)
 UI.SetValue("show_distance", true)
 
+UI.SetValue("fuse_box", true)
+UI.SetValue("coin_box", true)
+UI.SetValue("fusebox_box", true)
+UI.SetValue("breaker_box", true)
+UI.SetValue("freddy_box", true)
+
 UI.AddTab("The Hour Of Creation", function(tab)
     local itemsSection = tab:Section("Items", "Left")
     
@@ -326,6 +332,9 @@ UI.AddTab("The Hour Of Creation", function(tab)
         for _, draw in ipairs(FuseDrawings) do
             if draw then draw.Color = color end
         end
+        for _, text in ipairs(FuseTexts) do
+            if text then text.Color = color end
+        end
     end)
     
     itemsSection:Toggle("coin_enabled", "Track Coins", false, function(state)
@@ -338,6 +347,9 @@ UI.AddTab("The Hour Of Creation", function(tab)
         for _, draw in ipairs(CoinDrawings) do
             if draw then draw.Color = color end
         end
+        for _, text in ipairs(CoinTexts) do
+            if text then text.Color = color end
+        end
     end)
     
     itemsSection:Toggle("fusebox_enabled", "Track FuseBox", false, function(state)
@@ -348,6 +360,7 @@ UI.AddTab("The Hour Of Creation", function(tab)
         COLORS.FUSEBOX = color
         SaveColors(COLORS)
         if FuseBoxDrawings[1] then FuseBoxDrawings[1].Color = color end
+        if FuseBoxTexts[1] then FuseBoxTexts[1].Color = color end
     end)
     
     itemsSection:Toggle("breaker_enabled", "Track Breakers", false, function(state)
@@ -360,6 +373,9 @@ UI.AddTab("The Hour Of Creation", function(tab)
         for _, draw in ipairs(BreakerDrawings) do
             if draw then draw.Color = color end
         end
+        for _, text in ipairs(BreakerTexts) do
+            if text then text.Color = color end
+        end
     end)
     
     local freddySection = tab:Section("Freddy", "Right")
@@ -371,11 +387,19 @@ UI.AddTab("The Hour Of Creation", function(tab)
         COLORS.FREDDY = color
         SaveColors(COLORS)
         if FreddyDrawing then FreddyDrawing.Color = color end
+        if FreddyText then FreddyText.Color = color end
     end)
     
     local settingsSection = tab:Section("Settings", "Right")
+    settingsSection:Text("ESP Settings")
     settingsSection:Toggle("show_labels", "Show Labels", true)
     settingsSection:Toggle("show_distance", "Show Distance", true)
+    settingsSection:Spacing()
+    settingsSection:Toggle("fuse_box", "Fuse Box", true)
+    settingsSection:Toggle("coin_box", "Coin Box", true)
+    settingsSection:Toggle("fusebox_box", "FuseBox Box", true)
+    settingsSection:Toggle("breaker_box", "Breaker Box", true)
+    settingsSection:Toggle("freddy_box", "Freddy Box", true)
     
     local infoSection = tab:Section("Info", "Right")
     infoSection:Text("Tracks Fuses, Coins, FuseBox, Breakers, and Freddy.")
@@ -483,6 +507,7 @@ RunService.RenderStepped:Connect(function()
     UpdateTargets()
     
     if UI.GetValue("fuse_enabled") then
+        local showBox = UI.GetValue("fuse_box")
         for i, fuse in ipairs(FuseTargets) do
             local square = FuseDrawings[i]
             local text = FuseTexts[i]
@@ -491,8 +516,12 @@ RunService.RenderStepped:Connect(function()
                 if pos then
                     local s, on = WorldToScreen(pos)
                     if on then
-                        square.Position = s - Vector2.new(17, 17)
-                        square.Visible = true
+                        if showBox then
+                            square.Position = s - Vector2.new(17, 17)
+                            square.Visible = true
+                        else
+                            square.Visible = false
+                        end
                         
                         if text then
                             local dist = (pos - camPos).Magnitude
@@ -525,6 +554,7 @@ RunService.RenderStepped:Connect(function()
     end
     
     if UI.GetValue("coin_enabled") then
+        local showBox = UI.GetValue("coin_box")
         for i, coin in ipairs(CoinTargets) do
             local square = CoinDrawings[i]
             local text = CoinTexts[i]
@@ -533,8 +563,12 @@ RunService.RenderStepped:Connect(function()
                 if pos then
                     local s, on = WorldToScreen(pos)
                     if on then
-                        square.Position = s - Vector2.new(15, 15)
-                        square.Visible = true
+                        if showBox then
+                            square.Position = s - Vector2.new(15, 15)
+                            square.Visible = true
+                        else
+                            square.Visible = false
+                        end
                         
                         if text then
                             local dist = (pos - camPos).Magnitude
@@ -574,8 +608,12 @@ RunService.RenderStepped:Connect(function()
             if pos then
                 local s, on = WorldToScreen(pos)
                 if on then
-                    box.Position = s - Vector2.new(25, 25)
-                    box.Visible = true
+                    if UI.GetValue("fusebox_box") then
+                        box.Position = s - Vector2.new(25, 25)
+                        box.Visible = true
+                    else
+                        box.Visible = false
+                    end
                     
                     if text then
                         local dist = (pos - camPos).Magnitude
@@ -603,6 +641,7 @@ RunService.RenderStepped:Connect(function()
     end
     
     if UI.GetValue("breaker_enabled") then
+        local showBox = UI.GetValue("breaker_box")
         for i, breaker in ipairs(BreakerTargets) do
             local box = BreakerDrawings[i]
             local text = BreakerTexts[i]
@@ -611,8 +650,12 @@ RunService.RenderStepped:Connect(function()
                 if pos then
                     local s, on = WorldToScreen(pos)
                     if on then
-                        box.Position = s - Vector2.new(20, 20)
-                        box.Visible = true
+                        if showBox then
+                            box.Position = s - Vector2.new(20, 20)
+                            box.Visible = true
+                        else
+                            box.Visible = false
+                        end
                         
                         if text then
                             local dist = (pos - camPos).Magnitude
@@ -649,8 +692,12 @@ RunService.RenderStepped:Connect(function()
         if pos then
             local s, on = WorldToScreen(pos)
             if on then
-                FreddyDrawing.Position = s - Vector2.new(30, 45)
-                FreddyDrawing.Visible = true
+                if UI.GetValue("freddy_box") then
+                    FreddyDrawing.Position = s - Vector2.new(30, 45)
+                    FreddyDrawing.Visible = true
+                else
+                    FreddyDrawing.Visible = false
+                end
                 
                 if FreddyText then
                     local dist = (pos - camPos).Magnitude
