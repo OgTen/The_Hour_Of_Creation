@@ -73,31 +73,24 @@ local FreddyText = nil
 local frameCounter = 0
 local UPDATE_INTERVAL = 2
 
-local function ScanChunked(container, targetTable, filterFunc)
-    local function Scan(container)
-        local count = 0
-        for _, child in ipairs(container:GetChildren()) do
-            if filterFunc(child) then
-                table.insert(targetTable, child)
-            end
-            if child:IsA("Model") or child:IsA("Folder") then
-                Scan(child)
-            end
-            count = count + 1
-            if count % 100 == 0 then
-                task.wait()
-            end
-        end
+local function GetItemsFolder()
+    local gameFolder = workspace:FindFirstChild("Game")
+    if gameFolder then
+        return gameFolder:FindFirstChild("Items")
     end
-    Scan(container)
+    return nil
 end
 
 local function ScanFuses()
     task.spawn(function()
-        local function filter(child)
-            return child:IsA("Model") and child.Name == "Fuse"
+        local itemsFolder = GetItemsFolder()
+        if itemsFolder then
+            for _, child in ipairs(itemsFolder:GetChildren()) do
+                if child:IsA("Model") and child.Name == "Fuse" then
+                    table.insert(FuseTargets, child)
+                end
+            end
         end
-        ScanChunked(workspace, FuseTargets, filter)
         
         for i = 1, #FuseTargets do
             if not FuseDrawings[i] then
@@ -128,10 +121,14 @@ end
 
 local function ScanCoins()
     task.spawn(function()
-        local function filter(child)
-            return child:IsA("Model") and string.lower(child.Name):find("smallcoins")
+        local itemsFolder = GetItemsFolder()
+        if itemsFolder then
+            for _, child in ipairs(itemsFolder:GetChildren()) do
+                if child:IsA("Model") and string.lower(child.Name):find("smallcoins") then
+                    table.insert(CoinTargets, child)
+                end
+            end
         end
-        ScanChunked(workspace, CoinTargets, filter)
         
         for i = 1, #CoinTargets do
             if not CoinDrawings[i] then
